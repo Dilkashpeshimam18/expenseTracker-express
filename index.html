@@ -2,34 +2,72 @@
 <html>
     <head>
         <title>Expense Tracker</title>
+        <link rel="stylesheet" href="index.css">
     </head>
-    <body>
-        <form class="container">
-            <h4>Add expense</h4>
-            <input type="number" name='expense' id="price" class="expense-input">
+    <body class="container">
+        <div class="expense-body">
+        <h2>Expense Tracker</h2>
+        <div class="sub-container">
+            <div class="balance-container">
+                <h3>
+                    YOUR BALANCE:<br>
+                    <p class="totalBalance" id="total-balance">0</p>
+                </h3>
+            </div>
+            <div class="input-container">
+                <h4>ADD INCOME</h4>
+                <input placeholder="Enter income..." style="width: 200px;" type="number" id="income-input" class="incomeInput">
+                <button type="submit" id="incomeBtn" style="background-color:#04AA6D ; color:white; border:none">Add</button>
+            </div>
+        </div>
+       
+        <div class="total-container">
+            <div class="total-inner">
+                <h4>Income</h4>
+                <p class="income-total" id="income">0</p>
+            </div>
+            <div class="total-inner">
+                <h4>Expense</h4>
+                <p class="expense-total" id="expense">0</p>
+            </div>
+        </div>
+        <form class="form-container">
+            <div class="allInput">
+            <div class="form-input">
+                <h5>ADD EXPENSE</h4>
+                <input placeholder="Enter expense value..."type="number" name='expense' id="price" class="expense-input">
+             </div>
+             <div class="form-input">
+                <h5>ADD DESCRIPTION</h4>
+                <input placeholder="Enter description..."type="text" id="description" name='description' class="expense-description">
+             </div>
+             <div class="form-input">
+                <h5>ADD CATEGORY</h4>
+                <select class="select-category" id="category">
+                    <option value="Food">Food</option>
+                    <option value="Entertainment">Entertainment</option>
+                    <option value="Daily Need">Daily Need</option>
+                    <option value="Clothing">Clothing</option>
+                    <option value="Accessories">Accessories</option>
+    
+    
+                </select>
 
-            <h4>Add description</h4>
-            <input type="text" id="description" name='description' class="expense-description">
+             </div>
+            </div>
 
-            <h4>Add category</h4>
-            <select class="select-category" id="category">
-                <option value="Food">Food</option>
-                <option value="Entertainment">Entertainment</option>
-                <option value="Daily Need">Daily Need</option>
-                <option value="Clothing">Clothing</option>
-                <option value="Accessories">Accessories</option>
+          <div class="form-input">
+             <input style="background-color:#04AA6D ; color:white; border:none"class="btn" type="submit" id="button" value="Add Expense">
 
-
-            </select>
-
-            <input class="btn" type="submit" id="button" value="Add Expense">
+        </div>
 
         </form>
         <div>
-            <ul id="list" class="expense-list">
+            <ul  id="list" class="expense-list">
 
             </ul>
         </div>
+    </div>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
         <script src="index.js"></script>

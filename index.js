@@ -2,10 +2,46 @@ let price=document.querySelector('#price')
 let desc=document.querySelector('#description')
 let category=document.getElementById('category')
 let button=document.querySelector('.btn')
+let incomeInput=document.getElementById('income-input')
+let totalIncome=document.querySelector('#income')
+let addIncBtn=document.getElementById('incomeBtn')
+let totalBalance=document.querySelector('#total-balance')
+let totalExpense=document.querySelector('#expense')
 let allExpense=[]
+let expenseArr=[]
+
 let edit=false
 let categoryval=''
 let expenseId=''
+let expense;
+
+//add & display income
+
+addIncBtn.addEventListener('click',(e)=>{
+    e.preventDefault();
+    console.log('Button working')
+    if(incomeInput.value==''){
+        alert('Please add your income first!')
+    }else{
+        console.log(incomeInput.value)
+        var income=incomeInput.value
+        totalIncome.innerHTML=income
+        totalBalance.innerHTML=income
+        localStorage.setItem('income', income)
+        incomeInput.value=''
+       
+
+    }
+})
+
+
+
+
+
+
+
+
+
 category.onchange=function(evt){
     categoryval = evt.target.value;
 
@@ -22,17 +58,25 @@ button.addEventListener('click',(e)=>{
 
 
     }else{
+        let priceObj={
+            expense:price.value,
+            title:desc.value
+        }
+       
+
        
         if(edit==true){
-            axios.put(`https://crudcrud.com/api/ae6f5ee8fbaf49bfa32f0061321b994b/expenseData/${expenseId}`, expenseObj)
+            axios.put(`https://crudcrud.com/api/81e174ec281d4ad89c261c2df7da70f0/expenseData/${expenseId}`, expenseObj)
             .then((response)=>{
-               axios.get(`https://crudcrud.com/api/ae6f5ee8fbaf49bfa32f0061321b994b/expenseData/${expenseId}`)
+               axios.get(`https://crudcrud.com/api/81e174ec281d4ad89c261c2df7da70f0/expenseData/${expenseId}`)
                .then((res)=>{
                 let expenseList=document.querySelector('.expense-list')
                 let liToBeDeleted=document.getElementById(res.data._id)
                 expenseList.removeChild(liToBeDeleted)
                 displayExpense(res.data)
                 edit=false
+
+
 
 
                }).catch((err)=>{ console.log(err)})
@@ -43,18 +87,42 @@ button.addEventListener('click',(e)=>{
             })
 
         }else{
-                       axios.post('https://crudcrud.com/api/ae6f5ee8fbaf49bfa32f0061321b994b/expenseData', expenseObj)
+                axios.post('https://crudcrud.com/api/81e174ec281d4ad89c261c2df7da70f0/expenseData', expenseObj)
            .then((response)=>{
             displayExpense(response.data)
             categoryval=''
+            allExpense = JSON.parse(localStorage.getItem('allExpense')) || [];
+
+            allExpense.push(response.data)
+            localStorage.setItem('allExpense',JSON.stringify(allExpense))
+            expense=Number(totalExpense.innerHTML)+Number(price.value)
+           totalExpense.innerHTML=expense
+            totalBalance.innerHTML=Number(totalBalance.innerHTML)-Number(price.value)
 
            })
+
        }
     }
 })
 
  window.addEventListener('DOMContentLoaded',()=>{
-    axios.get('https://crudcrud.com/api/ae6f5ee8fbaf49bfa32f0061321b994b/expenseData')
+    expenseArr=JSON.parse(localStorage.getItem('allExpense'))
+   expenseArr.forEach((expense)=>{
+    expense=Number(totalExpense.innerHTML)+Number(expense.price)
+    totalExpense.innerHTML=expense
+    
+
+
+    
+   })
+   
+    var showIncome=localStorage.getItem('income')
+    totalIncome.innerHTML=showIncome
+        totalBalance.innerHTML=showIncome
+   let balance=Number(totalBalance.innerHTML)-Number(totalExpense.innerHTML)
+totalBalance.innerHTML=balance
+
+    axios.get('https://crudcrud.com/api/81e174ec281d4ad89c261c2df7da70f0/expenseData')
     .then((response)=>{
       var result=response.data
       result.forEach((res)=>{
@@ -71,26 +139,40 @@ button.addEventListener('click',(e)=>{
     let userList=document.querySelector('.expense-list')
     let userTag=`<li id='${expenseObj._id}'> ${expenseObj.description} ${expenseObj.price} - ${expenseObj.category} <button onClick=deleteExpense('${expenseObj._id}')>Delete</button><button onClick=editExpense('${expenseObj._id}')>Edit</button></li> `
     userList.innerHTML= userList.innerHTML + userTag 
-    document.querySelector('#price').value=''
+   var li=document.getElementById(expenseObj._id)
     document.querySelector('#description').value=''
     document.getElementById('category').value=''
 }
 
 function deleteExpense(id){
-    axios.delete(`https://crudcrud.com/api/ae6f5ee8fbaf49bfa32f0061321b994b/expenseData/${id}`)
+
+    axios.get(`https://crudcrud.com/api/81e174ec281d4ad89c261c2df7da70f0/expenseData/${id}`)
     .then((res)=>{
-        console.log('Deleted Successfully')
+        var result=res.data
+        totalExpense.innerHTML=Number(totalExpense.innerHTML)-result.price
+        totalBalance.innerHTML=Number(totalBalance.innerHTML)+Number(result.price)
+            allExpense = JSON.parse(localStorage.getItem('allExpense')) || [];
+            allExpense=allExpense.filter((item)=>item._id !==id)
+            localStorage.setItem('allExpense',JSON.stringify(allExpense))
+
+
+        axios.delete(`https://crudcrud.com/api/81e174ec281d4ad89c261c2df7da70f0/expenseData/${id}`)
+        .then((res)=>{
+            console.log('Deleted Successfully')
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
+
     })
-    .catch((err)=>{
-        console.log(err)
-    })
+  
     let expenseList=document.querySelector('.expense-list')
     let liToBeDeleted=document.getElementById(id)
     expenseList.removeChild(liToBeDeleted)
 }
 
 function editExpense(id){
-    axios.get(`https://crudcrud.com/api/ae6f5ee8fbaf49bfa32f0061321b994b/expenseData/${id}`)
+    axios.get(`https://crudcrud.com/api/81e174ec281d4ad89c261c2df7da70f0/expenseData/${id}`)
     .then((res)=>{
         var data= res.data
         price.value=data.price

@@ -1,0 +1,56 @@
+.container{
+    background-color: #E7E9EB;
+}
+.expense-body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.sub-container{
+    display: flex;
+}
+.input-container{
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+.balance-container{
+    margin-right: 70px;
+}
+.total-container{
+    display: flex;
+    width: 450px;
+    height: 120px;
+    background-color: white;
+    justify-content: space-around;
+}
+.total-inner{
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   padding-left: 20px;
+   padding-right: 20px;
+   margin-bottom: 30px;
+}
+.income-total{
+    color: green;
+}
+.expense-total{
+    color: red;
+}
+.form-container{
+    display: flex;
+    flex-direction: column;
+}
+.btn{
+    height: 30px;
+    width: 470px;
+}
+.allInput{
+    display: flex;
+}
+.form-input{
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
