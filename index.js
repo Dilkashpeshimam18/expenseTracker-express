@@ -121,6 +121,8 @@ button.addEventListener('click',(e)=>{
         //     totalBalance.innerHTML=balance
         //     price.value=''
 
+           }).catch((err)=>{
+            console.log(err)
            })
 
        }
