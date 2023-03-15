@@ -38,12 +38,6 @@ addIncBtn.addEventListener('click',(e)=>{
 
 
 
-
-
-
-
-
-
 category.onchange=function(evt){
     categoryval = evt.target.value;
 
@@ -109,21 +103,23 @@ button.addEventListener('click',(e)=>{
             })
 
         }else{
-                axios.post('https://crudcrud.com/api/eca1fbb0a90f46e0aadb09277d36b100/expenseData', expenseObj)
-           .then((response)=>{
-            displayExpense(response.data)
-            categoryval=''
-            allExpense = JSON.parse(localStorage.getItem('allExpense')) || [];
+                axios.post('http://localhost:4000/add-expense', expenseObj)
+           .then((res)=>{
+            console.log(res)
 
-            allExpense.push(response.data)
-            localStorage.setItem('allExpense',JSON.stringify(allExpense))
-            expense=Number(totalExpense.innerHTML)+Number(price.value)
-           totalExpense.innerHTML=expense
-           balance=Number(totalBalance.innerHTML)-Number(price.value)
+        //     displayExpense(response.data)
+        //     categoryval=''
+        //     allExpense = JSON.parse(localStorage.getItem('allExpense')) || [];
+
+        //     allExpense.push(response.data)
+        //     localStorage.setItem('allExpense',JSON.stringify(allExpense))
+        //     expense=Number(totalExpense.innerHTML)+Number(price.value)
+        //    totalExpense.innerHTML=expense
+        //    balance=Number(totalBalance.innerHTML)-Number(price.value)
      
 
-            totalBalance.innerHTML=balance
-            price.value=''
+        //     totalBalance.innerHTML=balance
+        //     price.value=''
 
            })
 
