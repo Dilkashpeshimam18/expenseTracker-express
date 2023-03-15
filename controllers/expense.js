@@ -19,3 +19,16 @@ exports.addExpense=async(req,res)=>{
     }
 
 }
+
+exports.getExpenses=async(req,res)=>{
+
+    try{
+        const allExpense=await Expense.findAll()
+      console.log(allExpense)
+        res.status(200).json({allExpense})
+
+    }catch(err){
+        console.log(err)
+    }
+
+}

@@ -130,27 +130,28 @@ button.addEventListener('click',(e)=>{
 })
 
  window.addEventListener('DOMContentLoaded',()=>{
-    expenseArr=JSON.parse(localStorage.getItem('allExpense'))
-   expenseArr.forEach((expense)=>{
-    expense=Number(totalExpense.innerHTML)+Number(expense.price)
-    totalExpense.innerHTML=expense
+//     expenseArr=JSON.parse(localStorage.getItem('allExpense'))
+//    expenseArr.forEach((expense)=>{
+//     expense=Number(totalExpense.innerHTML)+Number(expense.price)
+//     totalExpense.innerHTML=expense
     
 
 
     
-   })
+//    })
 
 
    
-    var showIncome=localStorage.getItem('income')
-    totalIncome.innerHTML=showIncome
-        totalBalance.innerHTML=showIncome
-    balance=Number(totalBalance.innerHTML)-Number(totalExpense.innerHTML)
-totalBalance.innerHTML=balance
+//     var showIncome=localStorage.getItem('income')
+//     totalIncome.innerHTML=showIncome
+//         totalBalance.innerHTML=showIncome
+//     balance=Number(totalBalance.innerHTML)-Number(totalExpense.innerHTML)
+// totalBalance.innerHTML=balance
 
-    axios.get('https://crudcrud.com/api/eca1fbb0a90f46e0aadb09277d36b100/expenseData')
+    axios.get('http://localhost:4000/get-expenses')
     .then((response)=>{
-      var result=response.data
+        console.log(response)
+      var result=response.data.allExpense
       result.forEach((res)=>{
         displayExpense(res)
       })
@@ -163,7 +164,7 @@ totalBalance.innerHTML=balance
 
  function displayExpense(expenseObj){
     let userList=document.querySelector('.expense-list')
-    let userTag=`<li id='${expenseObj._id}'> ${expenseObj.description} ${expenseObj.price} - ${expenseObj.category} <button onClick=editExpense('${expenseObj._id}')>Edit</button><button onClick=deleteExpense('${expenseObj._id}')>Delete</button></li> `
+    let userTag=`<li id='${expenseObj.id}'> ${expenseObj.description} ${expenseObj.amount} - ${expenseObj.category} <button onClick=editExpense('${expenseObj.id}')>Edit</button><button onClick=deleteExpense('${expenseObj.id}')>Delete</button></li> `
     userList.innerHTML= userList.innerHTML + userTag 
    var li=document.getElementById(expenseObj._id)
     document.querySelector('#description').value=''
