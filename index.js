@@ -107,7 +107,7 @@ button.addEventListener('click',(e)=>{
            .then((res)=>{
             console.log(res)
 
-        //     displayExpense(response.data)
+            displayExpense(res.data.expense)
         //     categoryval=''
         //     allExpense = JSON.parse(localStorage.getItem('allExpense')) || [];
 
@@ -172,43 +172,45 @@ button.addEventListener('click',(e)=>{
 }
 
 function deleteExpense(id){
-
-    axios.get(`https://crudcrud.com/api/eca1fbb0a90f46e0aadb09277d36b100/expenseData/${id}`)
+    axios.delete(`http://localhost:4000/delete-expense/${id}`)
     .then((res)=>{
-        var result=res.data
-        totalExpense.innerHTML=Number(totalExpense.innerHTML)-result.price
-        totalBalance.innerHTML=Number(totalBalance.innerHTML)+Number(result.price)
-            allExpense = JSON.parse(localStorage.getItem('allExpense')) || [];
-            allExpense=allExpense.filter((item)=>item._id !==id)
-            localStorage.setItem('allExpense',JSON.stringify(allExpense))
-
-
-        axios.delete(`https://crudcrud.com/api/eca1fbb0a90f46e0aadb09277d36b100/expenseData/${id}`)
-        .then((res)=>{
-            console.log('Deleted Successfully')
-        })
-        .catch((err)=>{
-            console.log(err)
-        })
-
-    })
-  
+        console.log(res)
+        
     let expenseList=document.querySelector('.expense-list')
     let liToBeDeleted=document.getElementById(id)
     expenseList.removeChild(liToBeDeleted)
+    })
+    .catch((err)=>{
+        console.log(err)
+    })
+
+    // axios.get(`https://crudcrud.com/api/eca1fbb0a90f46e0aadb09277d36b100/expenseData/${id}`)
+    // .then((res)=>{
+    //     var result=res.data
+    //     totalExpense.innerHTML=Number(totalExpense.innerHTML)-result.price
+    //     totalBalance.innerHTML=Number(totalBalance.innerHTML)+Number(result.price)
+    //         allExpense = JSON.parse(localStorage.getItem('allExpense')) || [];
+    //         allExpense=allExpense.filter((item)=>item._id !==id)
+    //         localStorage.setItem('allExpense',JSON.stringify(allExpense))
+
+
+  
+
+    // })
+  
 }
 
 function editExpense(id){
-    axios.get(`https://crudcrud.com/api/eca1fbb0a90f46e0aadb09277d36b100/expenseData/${id}`)
+    axios.get(`http://localhost:4000/edit-expense/${id}`)
     .then((res)=>{
-        var data= res.data
-        price.value=data.price
+        var data= res.data.expense
+        price.value=data.amount
         desc.value=data.description
         category.value=data.category
         categoryval=data.category
-        expenseId=data._id
+        expenseId=data.id
         edit=true
-        prevPrice=data.price
+        prevPrice=data.amount
        
    
     })
