@@ -6,6 +6,7 @@ const router=express.Router()
 router.get('/get-expenses',expenseController.getExpenses)
 router.post('/add-expense',expenseController.addExpense)
 router.delete('/delete-expense/:id',expenseController.deleteExpense)
-router.get('/edit-expense/:id',expenseController.getExpense)
+router.get('/get-expense/:id',expenseController.getExpense)
+router.post('/edit-expense/:id',expenseController.postEditRequest)
 
 module.exports=router;

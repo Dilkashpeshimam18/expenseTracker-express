@@ -48,15 +48,27 @@ exports.deleteExpense=async(req,res)=>{
 exports.getExpense=async(req,res)=>{
     try{
         const id=req.params.id
-
-        console.log(id)
-
         const expense=await Expense.findByPk(id)
-      
         res.status(201).json({expense})
 
 
     }catch(err){
         console.log(err)
     }
+}
+
+exports.postEditRequest=async(req,res)=>{
+  try{
+  const id=req.params.id
+  const expense=await Expense.findByPk(id)
+  expense.amount=req.body.price
+  expense.description=req.body.description
+  expense.category=req.body.category
+
+  expense.save()
+
+  res.status(201).json({expense})
+  }catch(err){
+    console.log(err)
+  }
 }

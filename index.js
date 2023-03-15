@@ -42,6 +42,8 @@ category.onchange=function(evt){
     categoryval = evt.target.value;
 
 }
+
+
 button.addEventListener('click',(e)=>{
     e.preventDefault()
     expenseObj={
@@ -62,34 +64,36 @@ button.addEventListener('click',(e)=>{
 
        
         if(edit==true){
-            axios.put(`https://crudcrud.com/api/eca1fbb0a90f46e0aadb09277d36b100/expenseData/${expenseId}`, expenseObj)
-            .then((response)=>{
-               axios.get(`https://crudcrud.com/api/eca1fbb0a90f46e0aadb09277d36b100/expenseData/${expenseId}`)
+            axios.post(`http://localhost:4000/edit-expense/${expenseId}`, expenseObj)
+            .then((res)=>{
+                console.log(res)
+               axios.get(`http://localhost:4000/get-expense/${expenseId}`)
                .then((res)=>{
+                console.log(res)
                 let expenseList=document.querySelector('.expense-list')
-                let liToBeDeleted=document.getElementById(res.data._id)
+                let liToBeDeleted=document.getElementById(res.data.expense.id)
                 expenseList.removeChild(liToBeDeleted)
-                displayExpense(res.data)
-                var result=res.data
+                displayExpense(res.data.expense)
+                var result=res.data.expense
               
                  
-                if(price.value>prevPrice){
-                    var diff=price.value-prevPrice
-                    expense=Number(totalExpense.innerHTML)+diff
-                    totalExpense.innerHTML=expense
-                    balance=Number(totalBalance.innerHTML)-diff
-                    totalBalance.innerHTML=balance
-                }else{
-                    var diff=prevPrice-price.value
-                    expense=Number(totalExpense.innerHTML)-diff
-                    totalExpense.innerHTML=expense
-                    balance=Number(totalBalance.innerHTML)+diff
-                    totalBalance.innerHTML=balance
-                }
-                allExpense = JSON.parse(localStorage.getItem('allExpense')) || [];
-                allExpense=allExpense.filter((item)=>item._id !==result._id)
-                allExpense.push(res.data)
-                localStorage.setItem('allExpense',JSON.stringify(allExpense))
+                // if(price.value>prevPrice){
+                //     var diff=price.value-prevPrice
+                //     expense=Number(totalExpense.innerHTML)+diff
+                //     totalExpense.innerHTML=expense
+                //     balance=Number(totalBalance.innerHTML)-diff
+                //     totalBalance.innerHTML=balance
+                // }else{
+                //     var diff=prevPrice-price.value
+                //     expense=Number(totalExpense.innerHTML)-diff
+                //     totalExpense.innerHTML=expense
+                //     balance=Number(totalBalance.innerHTML)+diff
+                //     totalBalance.innerHTML=balance
+                // }
+                // allExpense = JSON.parse(localStorage.getItem('allExpense')) || [];
+                // allExpense=allExpense.filter((item)=>item._id !==result._id)
+                // allExpense.push(res.data)
+                // localStorage.setItem('allExpense',JSON.stringify(allExpense))
                 edit=false
                 price.value=''
 
@@ -119,7 +123,7 @@ button.addEventListener('click',(e)=>{
      
 
         //     totalBalance.innerHTML=balance
-        //     price.value=''
+            price.value=''
 
            }).catch((err)=>{
             console.log(err)
@@ -201,8 +205,9 @@ function deleteExpense(id){
 }
 
 function editExpense(id){
-    axios.get(`http://localhost:4000/edit-expense/${id}`)
+    axios.get(`http://localhost:4000/get-expense/${id}`)
     .then((res)=>{
+        console.log(res)
         var data= res.data.expense
         price.value=data.amount
         desc.value=data.description
