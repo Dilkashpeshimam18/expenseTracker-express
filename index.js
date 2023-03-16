@@ -16,7 +16,7 @@ let categoryval=''
 let expenseId=''
 let expense;
 let balance;
-
+let id;
 //add & display income
 
 addIncBtn.addEventListener('click',async(e)=>{
@@ -136,17 +136,27 @@ button.addEventListener('click',(e)=>{
                    console.log(res)
        
                    displayExpense(res.data.expense)
+                   const expAmount={amount:res.data.expense.amount}
                //     categoryval=''
                //     allExpense = JSON.parse(localStorage.getItem('allExpense')) || [];
        
                //     allExpense.push(response.data)
                //     localStorage.setItem('allExpense',JSON.stringify(allExpense))
-               //     expense=Number(totalExpense.innerHTML)+Number(price.value)
-               //    totalExpense.innerHTML=expense
-               //    balance=Number(totalBalance.innerHTML)-Number(price.value)
+                console.log(id)
+               axios.post(`http://localhost:4000/edit-total-expense/${id}`,expAmount)
+               .then((res)=>{
+                console.log(res)
+                console.log('Editing Total Expense Value!!')
+               })
+               .catch((err)=>{
+                console.log(err)
+               })
+                   expense=Number(totalExpense.innerHTML)+Number(expAmount.amount)
+                  totalExpense.innerHTML=expense
+                  balance=Number(totalBalance.innerHTML)-Number(expAmount.amount)
             
        
-               //     totalBalance.innerHTML=balance
+                   totalBalance.innerHTML=balance
                    price.value=''
        
                   }).catch((err)=>{
@@ -162,28 +172,21 @@ button.addEventListener('click',(e)=>{
 
 
  window.addEventListener('DOMContentLoaded',async()=>{
-//     expenseArr=JSON.parse(localStorage.getItem('allExpense'))
-//    expenseArr.forEach((expense)=>{
-//     expense=Number(totalExpense.innerHTML)+Number(expense.price)
-//     totalExpense.innerHTML=expense
-    
-
-
-    
-//    })
-
-
-
 
 const getData=await axios.get('http://localhost:4000/get-data')
+
 console.log(getData)
 let incomeVal=getData.data.data[0].totalIncome
 let remainingVal=getData.data.data[0].totalRemaining
+let expenseVal=getData.data.data[0].totalExpense
+id=getData.data.data[0].id
+
 var showIncome=localStorage.getItem('income')
 totalIncome.innerHTML=incomeVal
     totalBalance.innerHTML=remainingVal
-balance=Number(totalBalance.innerHTML)-Number(totalExpense.innerHTML)
-totalBalance.innerHTML=balance
+    totalExpense.innerHTML=expenseVal
+
+
     axios.get('http://localhost:4000/get-expenses')
     .then((response)=>{
         console.log(response)

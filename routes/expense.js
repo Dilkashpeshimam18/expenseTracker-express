@@ -8,5 +8,6 @@ router.post('/add-expense',expenseController.addExpense)
 router.delete('/delete-expense/:id',expenseController.deleteExpense)
 router.get('/get-expense/:id',expenseController.getExpense)
 router.post('/edit-expense/:id',expenseController.postEditRequest)
+router.post('/edit-total-expense/:id',expenseController.editTotalExpense)
 
 module.exports=router;

@@ -1,4 +1,5 @@
 const Expense=require('../models/expense')
+const Total=require('../models/total')
 const { randomUUID } = require('crypto');
 
 
@@ -71,4 +72,26 @@ exports.postEditRequest=async(req,res)=>{
   }catch(err){
     console.log(err)
   }
+}
+
+exports.editTotalExpense=async(req,res)=>{
+    try{
+        const id=req.params.id
+        console.log(id)
+        console.log(req.body)
+        const data=await Total.findByPk(id)
+        data.totalExpense=data.totalExpense + Number(req.body.amount)
+        data.totalRemaining=data.totalRemaining-Number(req.body.amount)
+        data.totalIncome=data.totalIncome
+    
+        data.save()
+    
+        res.status(200).json({data})
+    }catch(err){
+        console.log(err)
+    }
+ 
+
+
+
 }
