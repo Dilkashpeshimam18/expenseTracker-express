@@ -5,6 +5,7 @@ const cors=require('cors')
 const sequelize=require('./utils/db')
 const mainRoutes=require('./routes/main')
 const expenseRoutes=require('./routes/expense')
+const incomeRoutes=require('./routes/income')
 
 const app=express()
 
@@ -14,6 +15,7 @@ app.use(cors())
 
 app.use(mainRoutes)
 app.use(expenseRoutes)
+app.use(incomeRoutes)
 
 
 sequelize.sync().then(()=>{

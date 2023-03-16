@@ -19,18 +19,39 @@ let balance;
 
 //add & display income
 
-addIncBtn.addEventListener('click',(e)=>{
+addIncBtn.addEventListener('click',async(e)=>{
     e.preventDefault();
     console.log('Button working')
     if(incomeInput.value==''){
         alert('Please add your income first!')
     }else{
-        console.log(incomeInput.value)
-        var income=incomeInput.value
-        totalIncome.innerHTML=income
-        totalBalance.innerHTML=income
-        localStorage.setItem('income', income)
-        incomeInput.value=''
+        try{
+            console.log(incomeInput.value)
+            var income=incomeInput.value
+            var expense=totalExpense.value
+            totalIncome.innerHTML=income
+            totalBalance.innerHTML=income
+
+            let totalData={
+                income:Number(income),
+                expense:0,
+                balance:Number(totalBalance.innerHTML)
+
+            }
+            
+
+            const addData=await axios.post('http://localhost:4000/add-data',totalData)
+            console.log(addData)
+
+       
+            localStorage.setItem('income', income)
+            incomeInput.value=''
+
+        }catch(err){
+            console.log(err)
+        }
+      
+
        
 
     }
@@ -51,89 +72,96 @@ button.addEventListener('click',(e)=>{
         description:desc.value,
         category:categoryval
       }
-    if(price.value=='' || desc.value=='' || category==''){
-     alert('Please enter the value')
-
-
-    }else{
-        let priceObj={
-            expense:price.value,
-            title:desc.value
-        }
+      if(totalIncome.innerHTML==0){
+        alert('Please enter your income first!')
+      }else{
+        if(price.value=='' || desc.value=='' || category==''){
+            alert('Please enter the value')
        
-
        
-        if(edit==true){
-            axios.post(`http://localhost:4000/edit-expense/${expenseId}`, expenseObj)
-            .then((res)=>{
-                console.log(res)
-               axios.get(`http://localhost:4000/get-expense/${expenseId}`)
-               .then((res)=>{
-                console.log(res)
-                let expenseList=document.querySelector('.expense-list')
-                let liToBeDeleted=document.getElementById(res.data.expense.id)
-                expenseList.removeChild(liToBeDeleted)
-                displayExpense(res.data.expense)
-                var result=res.data.expense
+           }else{
+               let priceObj={
+                   expense:price.value,
+                   title:desc.value
+               }
               
-                 
-                // if(price.value>prevPrice){
-                //     var diff=price.value-prevPrice
-                //     expense=Number(totalExpense.innerHTML)+diff
-                //     totalExpense.innerHTML=expense
-                //     balance=Number(totalBalance.innerHTML)-diff
-                //     totalBalance.innerHTML=balance
-                // }else{
-                //     var diff=prevPrice-price.value
-                //     expense=Number(totalExpense.innerHTML)-diff
-                //     totalExpense.innerHTML=expense
-                //     balance=Number(totalBalance.innerHTML)+diff
-                //     totalBalance.innerHTML=balance
-                // }
-                // allExpense = JSON.parse(localStorage.getItem('allExpense')) || [];
-                // allExpense=allExpense.filter((item)=>item._id !==result._id)
-                // allExpense.push(res.data)
-                // localStorage.setItem('allExpense',JSON.stringify(allExpense))
-                edit=false
-                price.value=''
+       
+              
+               if(edit==true){
+                   axios.post(`http://localhost:4000/edit-expense/${expenseId}`, expenseObj)
+                   .then((res)=>{
+                       console.log(res)
+                      axios.get(`http://localhost:4000/get-expense/${expenseId}`)
+                      .then((res)=>{
+                       console.log(res)
+                       let expenseList=document.querySelector('.expense-list')
+                       let liToBeDeleted=document.getElementById(res.data.expense.id)
+                       expenseList.removeChild(liToBeDeleted)
+                       displayExpense(res.data.expense)
+                       var result=res.data.expense
+                     
+                        
+                       // if(price.value>prevPrice){
+                       //     var diff=price.value-prevPrice
+                       //     expense=Number(totalExpense.innerHTML)+diff
+                       //     totalExpense.innerHTML=expense
+                       //     balance=Number(totalBalance.innerHTML)-diff
+                       //     totalBalance.innerHTML=balance
+                       // }else{
+                       //     var diff=prevPrice-price.value
+                       //     expense=Number(totalExpense.innerHTML)-diff
+                       //     totalExpense.innerHTML=expense
+                       //     balance=Number(totalBalance.innerHTML)+diff
+                       //     totalBalance.innerHTML=balance
+                       // }
+                       // allExpense = JSON.parse(localStorage.getItem('allExpense')) || [];
+                       // allExpense=allExpense.filter((item)=>item._id !==result._id)
+                       // allExpense.push(res.data)
+                       // localStorage.setItem('allExpense',JSON.stringify(allExpense))
+                       edit=false
+                       price.value=''
+       
+       
+       
+                      }).catch((err)=>{ console.log(err)})
+       
+                   })
+                   .catch((err)=>{
+                       console.log(err)
+                   })
+       
+               }else{
+                       axios.post('http://localhost:4000/add-expense', expenseObj)
+                  .then((res)=>{
+                   console.log(res)
+       
+                   displayExpense(res.data.expense)
+               //     categoryval=''
+               //     allExpense = JSON.parse(localStorage.getItem('allExpense')) || [];
+       
+               //     allExpense.push(response.data)
+               //     localStorage.setItem('allExpense',JSON.stringify(allExpense))
+               //     expense=Number(totalExpense.innerHTML)+Number(price.value)
+               //    totalExpense.innerHTML=expense
+               //    balance=Number(totalBalance.innerHTML)-Number(price.value)
+            
+       
+               //     totalBalance.innerHTML=balance
+                   price.value=''
+       
+                  }).catch((err)=>{
+                   console.log(err)
+                  })
+       
+              }
+           }
 
-
-
-               }).catch((err)=>{ console.log(err)})
-
-            })
-            .catch((err)=>{
-                console.log(err)
-            })
-
-        }else{
-                axios.post('http://localhost:4000/add-expense', expenseObj)
-           .then((res)=>{
-            console.log(res)
-
-            displayExpense(res.data.expense)
-        //     categoryval=''
-        //     allExpense = JSON.parse(localStorage.getItem('allExpense')) || [];
-
-        //     allExpense.push(response.data)
-        //     localStorage.setItem('allExpense',JSON.stringify(allExpense))
-        //     expense=Number(totalExpense.innerHTML)+Number(price.value)
-        //    totalExpense.innerHTML=expense
-        //    balance=Number(totalBalance.innerHTML)-Number(price.value)
-     
-
-        //     totalBalance.innerHTML=balance
-            price.value=''
-
-           }).catch((err)=>{
-            console.log(err)
-           })
-
-       }
-    }
+      }
+  
 })
 
- window.addEventListener('DOMContentLoaded',()=>{
+
+ window.addEventListener('DOMContentLoaded',async()=>{
 //     expenseArr=JSON.parse(localStorage.getItem('allExpense'))
 //    expenseArr.forEach((expense)=>{
 //     expense=Number(totalExpense.innerHTML)+Number(expense.price)
@@ -145,13 +173,17 @@ button.addEventListener('click',(e)=>{
 //    })
 
 
-   
-//     var showIncome=localStorage.getItem('income')
-//     totalIncome.innerHTML=showIncome
-//         totalBalance.innerHTML=showIncome
-//     balance=Number(totalBalance.innerHTML)-Number(totalExpense.innerHTML)
-// totalBalance.innerHTML=balance
 
+
+const getData=await axios.get('http://localhost:4000/get-data')
+console.log(getData)
+let incomeVal=getData.data.data[0].totalIncome
+let remainingVal=getData.data.data[0].totalRemaining
+var showIncome=localStorage.getItem('income')
+totalIncome.innerHTML=incomeVal
+    totalBalance.innerHTML=remainingVal
+balance=Number(totalBalance.innerHTML)-Number(totalExpense.innerHTML)
+totalBalance.innerHTML=balance
     axios.get('http://localhost:4000/get-expenses')
     .then((response)=>{
         console.log(response)
